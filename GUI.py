@@ -3,25 +3,30 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+#Main window of the GUI
 class mainGUI:
     def __init__(self, master):
         master.resizable(width=False, height=False)
         master.minsize(width=400, height = 100)
         master.title("Student Management System")
 
+        #Separate the window into a top frame and a bottom frame
         self.topFrame = ttk.Frame(master, padding="25 15")
         self.topFrame.pack(fill=BOTH)
 
         self.bottomFrame = ttk.Frame(master, padding="25 5")
         self.bottomFrame.pack(side=BOTTOM)
 
+        #Combobox goes into the top frame
         self.selectedVal = StringVar()
         self.comboSelect = ttk.Combobox(self.topFrame, textvariable = self.selectedVal, state = 'readonly')
         self.comboSelect.pack(side=TOP, fill=X)
         self.populateCombo()
         self.comboSelect.bind("<<ComboboxSelected>>", self.changeSelection)
 
-        self.buttonAdd = ttk.Button(self.bottomFrame, text = "Add Student", command=lambda: newStudentInput(master, self))
+        #Buttons in the bottom frame
+        #lambda used for any commands that require an argument to be passed
+        self.buttonAdd = ttk.Button(self.bottomFrame, text = "Add Student", command=lambda: newStudentInput(master, self)) #Creates newStudentInput
         self.buttonAdd.pack(side=LEFT)
 
         self.buttonDel = ttk.Button(self.bottomFrame, text = "Delete Student", command = self.deleteStudent)
@@ -33,22 +38,28 @@ class mainGUI:
         self.buttonViewGrades = ttk.Button(self.bottomFrame, text = "View Grades", command = lambda: self.viewGrade(master))
         self.buttonViewGrades.pack(side=LEFT)
 
+    #Sets the values of the combobox to be all the records within the database
     def populateCombo(self):
         self.comboSelect['values'] = SA.allRecords()
-        if len(self.comboSelect['values']) > 0:
+        if len(self.comboSelect['values']) > 0:     #If there are elements in the combobox, the first is selected (visually, however, it'll still just show a blank box)
             self.comboSelect.current(0)
             self.changeSelection(None)
-        else:
+        else:                                       #Otherwise the combobox is set to nothing
             self.comboselect.set('')
             self.changeSelection(None)
 
+    #Takes the ID from the string of the selected student
     def IDofSelected(self):
         tempSplitString = self.selectedVal.split(" ")
         return tempSplitString[0]
 
+    #Event bound to combobox changing
     def changeSelection(self, event):
         self.selectedVal = self.comboSelect.get()
 
+    #The selected student is deleted from the database after a confirmation message
+    #If the student is deleted, the combobox is repopulated to show the missing student
+    #If the combobox is empty, an error is shown
     def deleteStudent(self):
         if messagebox.askquestion(message = "Are you sure you wish to delete a student?  This is cannot be undone.", title="Continue?", icon="warning") == "yes":
             try:
@@ -57,10 +68,12 @@ class mainGUI:
             except Exception:
                 messagebox.showerror(message="There are no records to delete")
 
+    #Creates a gradeInput object
     def addGrade(self, master):
         if self.IDofSelected().isdigit():
             gradeInput(master, SA.findStudent(self.IDofSelected()), self)
 
+    #Opens a window that displays student information
     def viewGrade(self, master):
         self.viewGradeWin = Toplevel(master)
 
@@ -72,10 +85,14 @@ class mainGUI:
         self.returnButton = ttk.Button(self.viewGradeWin, text="Return", command = lambda: self.viewGradeWin.destroy())
         self.returnButton.pack(side=BOTTOM)
 
+
+#Window for the user to input a grade for the selected student
 class gradeInput:
 
+    #Takes the master window, the student selected in the combobox as well as the mainGUI object
     def __init__(self, master, selectedStudent, mainWindow):
 
+        #Creates a toplevel window for adding a grade
         self.addGradeWin = Toplevel(master)
         self.addGradeWin.minsize(width=225, height=50)
         self.addGradeWin.resizable(width=False, height=False)
@@ -93,12 +110,15 @@ class gradeInput:
         self.cancelButton= ttk.Button(self.addGradeWin, text="Cancel", command=lambda: self.addGradeWin.destroy())
         self.cancelButton.grid(row=1, column = 1, sticky=E, pady=(0,10))
 
+    #Adds the grade to the student.  Uses mainWindow so it can access MainGUI and repopulate the combobox
+    #This will allow the student list to be updated with the correct averages
     def confirmAddGrade(self, selectedStudent, mainWindow):
         selectedStudent.addGrade(self.textNewGrade.get())
         mainWindow.populateCombo()
         self.addGradeWin.destroy()
 
 
+#Window for adding new students
 class newStudentInput:
 
     def __init__(self, master, mainWindow):
@@ -123,6 +143,10 @@ class newStudentInput:
         self.addStudentCancel = ttk.Button(self.addStudentWin, text="Cancel", command=lambda: self.addStudentWin.destroy())
         self.addStudentCancel.grid(row=2, column=1, sticky=E, padx=(0, 10), pady=(0,5))
 
+    #Adds a student if two conditions are met:
+    #1. The student ID only contains digits
+    #2. The student name contains no digits
+    #After the student is added, the combobox is repopulated
     def addStudent(self, mainWindow):
 
         if not(self.textStudentID.get().isdigit()):
@@ -137,7 +161,7 @@ class newStudentInput:
         mainWindow.populateCombo()
         self.addStudentWin.destroy()
 
-
+#Creates a blank Tk window and uses that as the basis for the GUI
 root = Tk()
 run = mainGUI(root)
 root.mainloop()

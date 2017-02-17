@@ -25,8 +25,6 @@ class Student:
             return float("%.2f" % tempAvg)
         else:
             return 0
-        #else:
-            return 0
 
     #Replaces the current list of grades with a new one, then passes itself as
     #an argument to SRM.updateGraphics to update this student's record on the table
@@ -34,8 +32,8 @@ class Student:
         self.grades = newGrades
         SRM.updateGrades(self)
 
+    #Adds a grade if 0 <= grade <= 100
     def addGrade(self, addedGrade):
-        #print(addedGrade)
         if float(addedGrade) <= 100 and float(addedGrade) >= 0:
             self.grades.append(int(addedGrade))
             self.changeGrades(self.grades)
