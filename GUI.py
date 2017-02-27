@@ -7,7 +7,7 @@ from tkinter import messagebox
 class mainGUI:
     def __init__(self, master):
         master.resizable(width=False, height=False)
-        master.minsize(width=400, height = 100)
+        master.minsize(width=400, height=100)
         master.title("Student Management System")
 
         #Separate the window into a top frame and a bottom frame
@@ -79,7 +79,8 @@ class mainGUI:
 
         self.viewText = Text(self.viewGradeWin, width = 50, height = 10, wrap="word")
         self.tempStudent = SA.findStudent(self.IDofSelected())
-        self.viewText.insert("1.0", "ID: {}\nName: {}\nGrades: {}\nAverage: {}".format(self.tempStudent.ID, self.tempStudent.name, self.tempStudent.grades, self.tempStudent.calculateAvg()))
+        self.sText = "ID: {}\nName: {}\nGrades: {}\nAverage: {}".format(self.tempStudent.ID, self.tempStudent.name, self.tempStudent.grades, self.tempStudent.calculateAvg())
+        self.viewText.insert("1.0", self.sText)
         self.viewText.pack()
 
         self.returnButton = ttk.Button(self.viewGradeWin, text="Return", command = lambda: self.viewGradeWin.destroy())

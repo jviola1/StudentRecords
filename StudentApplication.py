@@ -15,16 +15,7 @@ class Student:
 
     #Take the mean of the list of grades
     def calculateAvg(self):
-        sum = 0.0
-
-        #if isinstance(self.grades, list):
-        if len(self.grades) > 0:
-            for x in self.grades:
-                sum += x
-            tempAvg = sum / len(self.grades)
-            return float("%.2f" % tempAvg)
-        else:
-            return 0
+        return float(sum(self.grades) / max(len(self.grades), 1)) #Max used to avoid divide by zero case
 
     #Replaces the current list of grades with a new one, then passes itself as
     #an argument to SRM.updateGraphics to update this student's record on the table
@@ -45,10 +36,10 @@ class Student:
 #that ID.  If no student is found, return a string saying the student couldn't be found
 def findStudent(x):
     tempStud = SRM.findStudent(x)
-    if tempStud == None:
-        return "Student not found with id {}".format(x)
-    else:
+    if tempStud:
         return Student(tempStud[0], tempStud[1], json.loads(tempStud[2]))
+    return "Student not found with id {}".format(x)
+
 
 #Takes a student object and adds it to the database.  Exception raised if given
 #something that isn't a student object

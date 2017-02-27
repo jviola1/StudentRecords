@@ -17,7 +17,7 @@ def populateDatabase():
     conn = sqlite3.connect('RecordsMF')
     c = conn.cursor()
     c.execute("SELECT * FROM Records")
-    if c.fetchall() == []:
+    if len(c.fetchall()) == 0:
         c.execute("INSERT INTO Records VALUES (?,?,?,?)", (10235, "John Smith", json.dumps([90,80,85,86,57,94]), 82))
         c.execute("INSERT INTO Records VALUES (?,?,?,?)", (10999, "Justin Jackson", json.dumps([80, 80, 56, 75, 100, 92]), 80.5))
         c.execute("INSERT INTO Records VALUES (?,?,?,?)", (501, "Jeremy Johnson", json.dumps([100, 80, 88]), 89.3))
