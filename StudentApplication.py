@@ -11,7 +11,7 @@ class Student:
 
     #Returns a string of information about the object
     def __str__(self):
-        return "{}, {}, {}".format(self.ID, self.name, self.calculateAvg())
+        return "%s, %s, %.2f" %(self.ID, self.name, self.calculateAvg())
 
     #Take the mean of the list of grades
     def calculateAvg(self):
@@ -28,9 +28,6 @@ class Student:
         if float(addedGrade) <= 100 and float(addedGrade) >= 0:
             self.grades.append(int(addedGrade))
             self.changeGrades(self.grades)
-
-    def getGrades(self):
-        return "Average: %.2f With Grades: %s" %(self.calculateAvg, self.grades)
 
 #Finds a student given an ID and returns the student object of the student with
 #that ID.  If no student is found, return a string saying the student couldn't be found

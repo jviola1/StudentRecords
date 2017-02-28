@@ -79,7 +79,7 @@ class mainGUI:
 
         self.viewText = Text(self.viewGradeWin, width = 50, height = 10, wrap="word")
         self.tempStudent = SA.findStudent(self.IDofSelected())
-        self.sText = "ID: {}\nName: {}\nGrades: {}\nAverage: {}".format(self.tempStudent.ID, self.tempStudent.name, self.tempStudent.grades, self.tempStudent.calculateAvg())
+        self.sText = "ID: %s\nName: %s\nGrades: %s\nAverage: %.2f" %(self.tempStudent.ID, self.tempStudent.name, self.tempStudent.grades, self.tempStudent.calculateAvg())
         self.viewText.insert("1.0", self.sText)
         self.viewText.pack()
 

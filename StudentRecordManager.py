@@ -45,7 +45,7 @@ def findStudent(studentID):
 def allRecords():
     conn = sqlite3.connect('RecordsMF')
     c = conn.cursor()
-    c.execute("SELECT ID, name, average FROM Records")
+    c.execute("SELECT ID, name, ROUND(average, 2) FROM Records")
     fullList = c.fetchall()
     conn.close()
     return fullList
